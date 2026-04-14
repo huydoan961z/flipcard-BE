@@ -10,7 +10,11 @@ const vocabRouter = require('./routes/vocab');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+// Middleware
+app.use(cors({
+  origin: ['https://flipcard-fe-xi.vercel.app', 'http://localhost:5173'],
+  credentials: true
+}));
 app.use(express.json());
 
 // Routes
