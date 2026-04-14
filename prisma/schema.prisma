@@ -1,0 +1,38 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Vocab {
+  id         Int      @id @default(autoincrement())
+  kanji      String?
+  hiragana   String
+  meaning    String?
+  level      String   // N5, N4, N3, N2, N1
+  created_at DateTime @default(now())
+
+  review     Review?
+
+  @@map("vocabs")
+}
+
+model Review {
+  id            Int       @id @default(autoincrement())
+  vocab_id      Int       @unique
+  ease_factor   Float     @default(2.5)
+  interval_day  Float     @default(1)
+  next_review   DateTime  @default(now())
+  last_review   DateTime?
+  correct_count Int       @default(0)
+  wrong_count   Int       @default(0)
+
+  vocab         Vocab     @relation(fields: [vocab_id], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}
